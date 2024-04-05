@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "syntax.tab.h" // from bison
-// #include "tokens.h"
+// #include "y.tab.h" 
+#include "tokens.h"
 // #include "ast.h"
 
 // yylineno = 1;
