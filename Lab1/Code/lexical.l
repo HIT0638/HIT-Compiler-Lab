@@ -52,24 +52,23 @@ TAB [\t]
 
 
 %%
+{TYPE}            { yylval = createNode(yylineno, T_TYPE, yytext, 0); return TYPE; }
 {STRUCT}          { yylval = createNode(yylineno, T_OTHER, "STRUCT", 0); return STRUCT; }
 {RETURN}          { yylval = createNode(yylineno, T_OTHER, "RETURN", 0); return RETURN; }
 {IF}              { yylval = createNode(yylineno, T_OTHER, "IF", 0); return IF; }
 {ELSE}            { yylval = createNode(yylineno, T_OTHER, "ELSE", 0); return ELSE; }
 {WHILE}           { yylval = createNode(yylineno, T_OTHER, "WHILE", 0); return WHILE; }
-{TYPE}            { yylval = createNode(yylineno, T_TYPE, yytext, 0); return TYPE; }
 {INT}             { yylval = createNode(yylineno, T_INT, yytext, 0); return INT; }
 {HEX}             { yylval = createNode(yylineno, T_HEX, yytext, 0); return INT; } // HEX和OCT被视为INT类型
 {OCT}             { yylval = createNode(yylineno, T_OCT, yytext, 0); return INT; }
-{RELOP}           { yylval = createNode(yylineno, T_OTHER, "RELOP", 0); return RELOP; }
 {FLOAT}           { yylval = createNode(yylineno, T_FLOAT, yytext, 0); return FLOAT; }
 {ID}              { yylval = createNode(yylineno, T_ID, yytext, 0); return ID; }
-
-";"               { yylval = createNode(yylineno, T_OTHER, "SEMI", 0); return SEMI; } 
+";"               { yylval = createNode(yylineno, T_OTHER, "SEMI", 0); return SEMI; }
 ","               { yylval = createNode(yylineno, T_OTHER, "COMMA", 0); return COMMA; }
 "="               { yylval = createNode(yylineno, T_OTHER, "ASSIGNOP", 0); return ASSIGNOP; }
+{RELOP}           { yylval = createNode(yylineno, T_OTHER, "RELOP", 0); return RELOP; }
 "+"               { yylval = createNode(yylineno, T_OTHER, "PLUS", 0); return PLUS; }
-"-"               { yylval = createNode(yylineno, T_OTHER, "MINUS", 0); return MINUS; }     
+"-"               { yylval = createNode(yylineno, T_OTHER, "MINUS", 0); return MINUS; }
 "*"               { yylval = createNode(yylineno, T_OTHER, "STAR", 0); return STAR; }
 "/"               { yylval = createNode(yylineno, T_OTHER, "DIV", 0); return DIV; }
 "&&"              { yylval = createNode(yylineno, T_OTHER, "AND", 0); return AND; }
@@ -82,6 +81,10 @@ TAB [\t]
 "]"               { yylval = createNode(yylineno, T_OTHER, "RB", 0); return RB; }
 "{"               { yylval = createNode(yylineno, T_OTHER, "LC", 0); return LC; }
 "}"               { yylval = createNode(yylineno, T_OTHER, "RC", 0); return RC; }
+{BLANK}           {}
+{TAB}             { yycolumn += 3; }
+
+
 
 
 "//"                    {

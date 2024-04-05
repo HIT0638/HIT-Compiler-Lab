@@ -34,16 +34,16 @@ syntax-c: $(YFILE)
 # 定义的一些伪目标
 .PHONY: clean test
 test:
-	./parser ../Test/test1.cmm >> ../testout/test1out.txt
-	./parser ../Test/test2.cmm >> ../testout/test2out.txt
-	./parser ../Test/test3.cmm >> ../testout/test3out.txt
-	./parser ../Test/test4.cmm >> ../testout/test4out.txt
-	./parser ../Test/test5.cmm >> ../testout/test5out.txt
-	./parser ../Test/test6.cmm >> ../testout/test6out.txt
-	./parser ../Test/test7.cmm >> ../testout/test7out.txt
-	./parser ../Test/test8.cmm >> ../testout/test8out.txt
-	./parser ../Test/test9.cmm >> ../testout/test9out.txt
-	./parser ../Test/test10.cmm >> ../testout/test10out.txt
+	./parser ../Test/test1.cmm > ../testout/test1out.txt
+	./parser ../Test/test2.cmm > ../testout/test2out.txt
+	./parser ../Test/test3.cmm > ../testout/test3out.txt
+	./parser ../Test/test4.cmm > ../testout/test4out.txt
+	./parser ../Test/test5.cmm > ../testout/test5out.txt
+	./parser ../Test/test6.cmm > ../testout/test6out.txt
+	./parser ../Test/test7.cmm > ../testout/test7out.txt
+	./parser ../Test/test8.cmm > ../testout/test8out.txt
+	./parser ../Test/test9.cmm > ../testout/test9out.txt
+	./parser ../Test/test10.cmm > ../testout/test10out.txt
 
 clean:
 	rm -f parser lex.yy.c syntax.tab.c syntax.tab.h syntax.output
