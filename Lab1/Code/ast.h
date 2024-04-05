@@ -2,44 +2,39 @@
 #define AST_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <assert.h>
 
-typedef enum {
-    NodeType_SUnit, // 语法单元节点
-    NodeType_LUnit // 词法单元节点
-} NodeType;
+/* TYPE DEFINITION */
 
-typedef enum {
-    LU_ID,
-    LU_TYPE,
-    LU_INT,
-    LU_FLOAT,
-    // more type of lexicalUnit...
-} LUType;
+// type definition of lexical unit
+typedef enum Type
+{
+    T_INT,
+    T_HEX,
+    T_OCT,
+    T_FLOAT,
+    T_ID,
+    T_TYPE,
+    T_OTHER,
+    NON_T // 非终结符
+} Type;
 
-typedef struct ASTNode {
-    NodeType nodeType;
-    int line; // 节点在源文件中的行号
-    union {
-        struct {
-            struct ASTNode* child;
-            struct ASTNode* next;
-            char* unitName; // 语法单元名称
-        } syntaxUnit;
-        struct {
-            LUType type; // 词法单元类型
-            char* lexeme; // 词法单元词素
-            union {
-                int intValue;
-                float floatValue;
-                char* name;
-                // 其他可能需要的值
-            } value;
-        } lexicalUnit;
-    } data;
-} ASTNode;
+// Node of the syntax tree
+typedef struct TreeNode {
+    int lineno; // line number of the lexical unit
+    Type type; // type of the lexical unit
+    char* value; // value of the lexical unit(yytext)
+    struct TreeNode* firstChild, * nextSibling;
+} TreeNode;
 
-ASTNode* createNode_S(NodeType nodeType, int line, char* unitName);
-ASTNode* createNode_L(NodeType nodeType, int line, LUType type, char* lexeme, auto value);
-void printAST(ASTNode* node);
+typedef TreeNode* pNode;
+
+// create a new tree node to connect several child node
+pNode createNode(int _lineno, Type _type, char* _value, int args, ...);
+void delTree(pNode root);
+void printTree(pNode root, int i);
 
 #endif

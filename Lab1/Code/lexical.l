@@ -3,14 +3,21 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "syntax.tab.h" // from bison
+// #include "syntax.tab.h" // from bison
 // #include "tokens.h"
 // #include "ast.h"
 
-// yylineno = 1;
 void yyerror(const char* msg);
 void unrecognized_char(char c);
 
+// 维护语法单元对应的第一个词素的行号和列号
+int ycolumn = 1;
+#define YY_USER_ACTION
+/* yylloc -> lex location 表示当前词法单元对应的信息位置 */
+    yylloc.first_line = yylloc.last_line = yylineno; \
+    yylloc.first_column = yycolumn; \
+    yylloc.last_column = yycolumn + yyleng - 1;
+    yycolumn += yyleng;
 // #define _DUPTEXT { yyval = strdup(yytext) }
 %}
 
@@ -41,37 +48,36 @@ TAB [\t]
 
 
 %%
-{STRUCT}             { printf("STRUCT\n");  }
-{RETURN}               { printf("RETURN\n");  }           
-{IF}                 { printf("IF\n");  }
-{ELSE}                  { printf("ELSE\n");  }
-{WHILE}                 { printf("WHILE\n"); }
-{TYPE}                  { printf("TYPE\n"); }
-{INT}               { printf("INT\n");  }
-{HEX}           { printf("HEX\n"); }
-{OCT}           { printf("OCT\n"); }
-{RELOP}               { printf("RELOP\n"); }
-{FLOAT}              { printf("FLOAT\n");  }
-{ID}            { printf("ID\n");  }
+{STRUCT}          { return STRUCT; }
+{RETURN}          { return RETURN; }
+{IF}              { return IF; }
+{ELSE}            { return ELSE; }
+{WHILE}           { return WHILE; }
+{TYPE}            { return TYPE; }
+{INT}             { return INT; }
+{HEX}             { return INT; } // HEX和OCT被视为INT类型
+{OCT}             { return INT; }
+{RELOP}           { return RELOP; }
+{FLOAT}           { return FLOAT; }
+{ID}              { return ID; }
 
-
-";"                     { printf("SEMI\n"); } 
-","                     { printf("COMMA\n"); }
-"="                     { printf("ASSIGNOP\n");  }
-"+"                     { printf("PLUS\n");  }
-"-"                     { printf("MINUS\n"); }     
-"*"                     { printf("STAR\n"); }
-"/"                     { printf("DIV\n"); }
-"&&"                    { printf("AND\n"); }
-"||"                    { printf("OR\n");  }
-"."                     { printf("DOT\n");  }
-"!"                     { printf("NOT\n");  }
-"("                     { printf("LP\n");  }
-")"                     { printf("RP\n"); }
-"["                     { printf("LB\n");  }
-"]"                     { printf("RB\n");}
-"{"                     { printf("LC\n"); }
-"}"                     { printf("RC\n"); }
+";"               { return SEMI; } 
+","               { return COMMA; }
+"="               { return ASSIGNOP; }
+"+"               { return PLUS; }
+"-"               { return MINUS; }     
+"*"               { return STAR; }
+"/"               { return DIV; }
+"&&"              { return AND; }
+"||"              { return OR; }
+"."               { return DOT; }
+"!"               { return NOT; }
+"("               { return LP; }
+")"               { return RP; }
+"["               { return LB; }
+"]"               { return RB; }
+"{"               { return LC; }
+"}"               { return RC; }
 
 
 "//"                    {
@@ -96,6 +102,9 @@ TAB [\t]
 }
 {BLANK} {}
 
+
+\n  { yycolumn = 1; }
+
 {OCTERROR}  {printf("Error type A at Line %d: Illegal octal number \'%s\'\n", yylineno, yytext); }
 {HEXERROR} {printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'\n", yylineno, yytext); }
 {DECERROR} {printf("Error type A at Line %d: Illegal decimal number \'%s\'\n", yylineno, yytext); }
@@ -104,22 +113,6 @@ TAB [\t]
 
 %%
 
-int main(int argc, char** argv)
-{
-    if (argc > 1){
-        // read the input file as yyin
-        FILE* file;
-        file = fopen(argv[1], "r");
-        if(!file){
-            fprintf(stderr, "Could not open file %s\n", argv[1]);
-            exit(1);
-        }
-
-        yyin = file;
-    }
-
-    while(yylex() != 0);
-}
 
 /* Handle with error type A*/
 void unrecognized_char(char c)

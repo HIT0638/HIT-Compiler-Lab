@@ -1,30 +1,16 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include "tokens.h"
 
-extern int cur_line;
+#include "lex.yy.c"
+#include "ast.h"
+
+
 
 void yyerror(const char*);
 
-// #define YYSTYPE char*;
 %}
 
-%union {
-    int ival;
-    float fval;
-    char* sval;
-    enum RelOp relOp;
-}
-
-%token <ival> INT TYPE_INT TYPE_FLOAT TYPE
-%token <fval> FLOAT
-%token <sval> ID
-%token SEMI COMMA ASSIGNOP PLUS MINUS STAR DIV AND OR DOT NOT LP RP LB RB LC RC STRUCT RETURN IF ELSE WHILE
-%token <relOp> RELOP
-
-%type <ival> expression
-%type <fval> float_expression
+%nonassoc LOWER_THAN_ELSE /* 解决 悬空else问题 */ 
+%nonassoc ELSE
 
 %%
 
@@ -89,7 +75,7 @@ StmtList: Stmt StmtList         {}
 Stmt: Exp SEMI                  {}
 |   CompSt                      {}
 |   RETURN Exp SEMI             {}
-|   IF LP Exp RP Stmt           {}
+|   IF LP Exp RP Stmt %prec LOWER_THAN_ELSE    {}
 |   IF LP Exp RP Stmt ELSE  Stmt{}
 |   WHILE LP Exp RP Stmt        {}
 ;

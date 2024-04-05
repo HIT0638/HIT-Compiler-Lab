@@ -104,23 +104,6 @@ TAB [\t]
 
 %%
 
-int main(int argc, char** argv)
-{
-    if (argc > 1){
-        // read the input file as yyin
-        FILE* file;
-        file = fopen(argv[1], "r");
-        if(!file){
-            fprintf(stderr, "Could not open file %s\n", argv[1]);
-            exit(1);
-        }
-
-        yyin = file;
-    }
-
-    while(yylex() != 0);
-}
-
 /* Handle with error type A*/
 void unrecognized_char(char c)
 {

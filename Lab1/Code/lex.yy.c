@@ -372,8 +372,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 36
-#define YY_END_OF_BUFFER 37
+#define YY_NUM_RULES 38
+#define YY_END_OF_BUFFER 39
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -383,18 +383,18 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[110] =
     {   0,
-        0,    0,   37,   35,   36,   30,   21,   35,   22,   23,
-       16,   14,   12,   15,   20,   17,    7,    7,   11,    8,
-       13,    8,   10,   10,   24,   25,   10,   10,   10,   10,
-       10,   10,   26,   35,   27,    8,   18,    9,   34,   29,
-       28,    9,    0,   31,   33,   33,    0,    7,   10,    0,
-        9,   10,   10,    3,   10,   10,   10,   10,   19,   34,
-       34,   34,    9,   34,   33,   33,   31,   31,   33,   33,
-       34,    9,    0,   32,    9,   10,   10,    6,   10,   10,
-       10,   34,    9,   34,   34,    9,   33,   33,   33,   33,
-       33,    9,   32,   32,    4,   10,   10,   10,   10,   34,
+        0,    0,   39,   37,   38,   32,   23,   37,   24,   25,
+       18,   16,   14,   17,   22,   19,    7,    7,   13,   10,
+       15,   10,   12,   12,   26,   27,   12,   12,   12,   12,
+       12,   12,   28,   37,   29,   10,   20,   11,   36,   31,
+       30,   11,    9,   33,   35,   35,    0,    7,   12,    0,
+       11,   12,   12,    3,   12,   12,   12,   12,   21,   36,
+       36,   36,   11,   36,   35,   35,   33,   33,   35,   35,
+       36,   11,    8,   34,   11,   12,   12,    6,   12,   12,
+       12,   36,   11,   36,   36,   11,   35,   35,   35,   35,
+       35,   11,   34,   34,    4,   12,   12,   12,   12,   36,
 
-        9,   33,   33,   10,   10,    5,    2,    1,    0
+       11,   35,   35,   12,   12,    5,    2,    1,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -561,10 +561,10 @@ static yyconst flex_int16_t yy_chk[365] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[37] =
+static yyconst flex_int32_t yy_rule_can_match_eol[39] =
     {   0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,     };
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -912,115 +912,125 @@ YY_RULE_SETUP
 case 8:
 YY_RULE_SETUP
 #line 51 "t-lexical.l"
-{ printf("RELOP\n"); }
+{ printf("HEX\n"); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 52 "t-lexical.l"
-{ printf("FLOAT\n");  }
+{ printf("OCT\n"); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 53 "t-lexical.l"
-{ printf("ID\n");  }
+{ printf("RELOP\n"); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 56 "t-lexical.l"
-{ printf("SEMI\n"); } 
+#line 54 "t-lexical.l"
+{ printf("FLOAT\n");  }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 57 "t-lexical.l"
-{ printf("COMMA\n"); }
+#line 55 "t-lexical.l"
+{ printf("ID\n");  }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 58 "t-lexical.l"
-{ printf("ASSIGNOP\n");  }
+{ printf("SEMI\n"); } 
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 59 "t-lexical.l"
-{ printf("PLUS\n");  }
+{ printf("COMMA\n"); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 60 "t-lexical.l"
-{ printf("MINUS\n"); }     
+{ printf("ASSIGNOP\n");  }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 61 "t-lexical.l"
-{ printf("STAR\n"); }
+{ printf("PLUS\n");  }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 62 "t-lexical.l"
-{ printf("DIV\n"); }
+{ printf("MINUS\n"); }     
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 63 "t-lexical.l"
-{ printf("AND\n"); }
+{ printf("STAR\n"); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 64 "t-lexical.l"
-{ printf("OR\n");  }
+{ printf("DIV\n"); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 65 "t-lexical.l"
-{ printf("DOT\n");  }
+{ printf("AND\n"); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 66 "t-lexical.l"
-{ printf("NOT\n");  }
+{ printf("OR\n");  }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 67 "t-lexical.l"
-{ printf("LP\n");  }
+{ printf("DOT\n");  }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 68 "t-lexical.l"
-{ printf("RP\n"); }
+{ printf("NOT\n");  }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 69 "t-lexical.l"
-{ printf("LB\n");  }
+{ printf("LP\n");  }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 70 "t-lexical.l"
-{ printf("RB\n");}
+{ printf("RP\n"); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 71 "t-lexical.l"
-{ printf("LC\n"); }
+{ printf("LB\n");  }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 72 "t-lexical.l"
-{ printf("RC\n"); }
+{ printf("RB\n");}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 75 "t-lexical.l"
+#line 73 "t-lexical.l"
+{ printf("LC\n"); }
+	YY_BREAK
+case 29:
+YY_RULE_SETUP
+#line 74 "t-lexical.l"
+{ printf("RC\n"); }
+	YY_BREAK
+case 30:
+YY_RULE_SETUP
+#line 77 "t-lexical.l"
 {
     // 丢弃双斜线后，该行的所有字符
     char c = input();
     while(c != '\n') c = input();
 }
 	YY_BREAK
-case 29:
+case 31:
 YY_RULE_SETUP
-#line 81 "t-lexical.l"
+#line 83 "t-lexical.l"
 {
     char a = input();
     char b = input();
@@ -1036,42 +1046,42 @@ YY_RULE_SETUP
     }
 }
 	YY_BREAK
-case 30:
-YY_RULE_SETUP
-#line 95 "t-lexical.l"
-{}
-	YY_BREAK
-case 31:
-YY_RULE_SETUP
-#line 97 "t-lexical.l"
-{printf("Error type A at Line %d: Illegal octal number \'%s\'\n", yylineno, yytext); }
-	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 98 "t-lexical.l"
-{printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'\n", yylineno, yytext); }
+#line 97 "t-lexical.l"
+{}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 99 "t-lexical.l"
-{printf("Error type A at Line %d: Illegal decimal number \'%s\'\n", yylineno, yytext); }
+{printf("Error type A at Line %d: Illegal octal number \'%s\'\n", yylineno, yytext); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 100 "t-lexical.l"
-{printf("Error type A at Line %d: Illegal floating number \'%s\'\n", yylineno, yytext);  }
+{printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'\n", yylineno, yytext); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 101 "t-lexical.l"
-{printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext); }
+{printf("Error type A at Line %d: Illegal decimal number \'%s\'\n", yylineno, yytext); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
+#line 102 "t-lexical.l"
+{printf("Error type A at Line %d: Illegal floating number \'%s\'\n", yylineno, yytext);  }
+	YY_BREAK
+case 37:
+YY_RULE_SETUP
 #line 103 "t-lexical.l"
+{printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext); }
+	YY_BREAK
+case 38:
+YY_RULE_SETUP
+#line 105 "t-lexical.l"
 ECHO;
 	YY_BREAK
-#line 1075 "lex.yy.c"
+#line 1085 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2081,26 +2091,9 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 103 "t-lexical.l"
+#line 105 "t-lexical.l"
 
 
-
-int main(int argc, char** argv)
-{
-    if (argc > 1){
-        // read the input file as yyin
-        FILE* file;
-        file = fopen(argv[1], "r");
-        if(!file){
-            fprintf(stderr, "Could not open file %s\n", argv[1]);
-            exit(1);
-        }
-
-        yyin = file;
-    }
-
-    while(yylex() != 0);
-}
 
 /* Handle with error type A*/
 void unrecognized_char(char c)
