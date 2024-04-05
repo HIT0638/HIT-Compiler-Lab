@@ -18,9 +18,9 @@
 pNode createNode(int _lineno, Type _type, char *_value, int args, ...)
 {
     pNode currNode = (pNode)malloc(sizeof(TreeNode));
-    assert(currNode == NULL);
+    assert(currNode != NULL);
     currNode->value = (char *)malloc(sizeof(char) * (strlen(_value) + 1));
-    assert(currNode->value);
+    assert(currNode->value != NULL);
 
     // set values of currNode
     currNode->lineno = _lineno;
@@ -93,7 +93,7 @@ void printTree(pNode root, int i)
     {
         while (n > 1)
         {
-            print("  ");
+            printf("  ");
             n--;
         }
 

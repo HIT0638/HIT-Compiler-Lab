@@ -1,25 +1,27 @@
 %{
+#include "ast.h"
+#include "syntax.tab.h" // from bison
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "syntax.tab.h" // from bison
+
 // #include "tokens.h"
-#include "ast.h"
+
 
 extern int lexical_error;
 
 void yyerror(const char* msg);
-void unrecognized_char(char c);
 
 // 维护语法单元对应的第一个词素的行号和列号
-int ycolumn = 1;
-#define YY_USER_ACTION
+int yycolumn = 1;
 /* yylloc -> lex location 表示当前词法单元对应的信息位置 */
+#define YY_USER_ACTION \
     yylloc.first_line = yylloc.last_line = yylineno; \
     yylloc.first_column = yycolumn; \
-    yylloc.last_column = yycolumn + yyleng - 1;
-    yycolumn += yyleng;
+    yylloc.last_column = yycolumn + yyleng - 1; \
+    yycolumn += yyleng; \
 // #define _DUPTEXT { yyval = strdup(yytext) }
 %}
 
