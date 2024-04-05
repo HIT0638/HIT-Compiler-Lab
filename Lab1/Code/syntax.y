@@ -1,14 +1,55 @@
 %{
+#define YYSTYPE TreeNode*;
 
 #include "lex.yy.c"
 #include "ast.h"
 
-
+pNode root;
 
 void yyerror(const char*);
 
 %}
 
+// terminal tokens
+%token INT
+%token FLOAT
+%token ID   // identifier
+%token TYPE // type
+%token RELOP
+%token ASSIGNOP //=
+%token PLUS MINUS STAR DIV  // operator
+%token AND OR NOT // logical operator
+%token DOT COMMA SEMI LP RP LB RB LC RC // punctuation
+%token STRUCT RETURN IF ELSE WHILE    // keyword
+%token ERRORNUM ERRORID
+
+// non-terminals
+%type Program ExtDefList ExtDef ExtDecList   //  High-level Definitions
+%type Specifier StructSpecifier OptTag Tag   //  Specifiers
+%type VarDec FunDec VarList ParamDec         //  Declarators
+%type CompSt StmtList Stmt                   //  Statements
+%type DefList Def Dec DecList                //  Local Definitions
+%type Exp Args                               //  Expressions
+
+// precedence and associativity
+/*
+    %start: 开始符
+    %left: 左结合
+    %right: 右结合
+    %nonassoc: 不可结合
+    另外，排在后面的算符优先级高于排在前面的算符
+*/
+%start Program
+%right ASSIGNOP
+%left OR
+%left AND
+%left RELOP
+%left PLUS MINUS UMINUS // 负号
+%left STAR DIV
+%right NOT
+%left DOT
+%left LB RB
+%left LP RP
 %nonassoc LOWER_THAN_ELSE /* 解决 悬空else问题 */ 
 %nonassoc ELSE
 
@@ -102,28 +143,7 @@ Exp: Exp ASSIGNOP Exp           {}
 | Exp OR  Exp                   {}
 | Exp RELOP Exp                 
     {
-        switch ($2) { // 根据第二个元素（RELOP Token）的值选择动作
-            case GE:
-                printf("Greater than or equal to operation\n");
-                break;
-            case LE:
-                printf("Less than or equal to operation\n");
-                break;
-            case EQ:
-                printf("Equal to operation\n");
-                break;
-            case NE:
-                printf("Not equal to operation\n");
-                break;
-            case GT:
-                printf("Greater than operation\n");
-                break;
-            case LT:
-                printf("Less than operation\n");
-                break;
-            default:
-                yyerror("Unknown relational operator");
-        } 
+         
     }
 | Exp PLUS Exp                  {}
 | Exp MINUS Exp                 {}

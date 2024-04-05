@@ -3,9 +3,11 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-// #include "syntax.tab.h" // from bison
+#include "syntax.tab.h" // from bison
 // #include "tokens.h"
-// #include "ast.h"
+#include "ast.h"
+
+extern int lexical_error;
 
 void yyerror(const char* msg);
 void unrecognized_char(char c);
@@ -48,36 +50,36 @@ TAB [\t]
 
 
 %%
-{STRUCT}          { return STRUCT; }
-{RETURN}          { return RETURN; }
-{IF}              { return IF; }
-{ELSE}            { return ELSE; }
-{WHILE}           { return WHILE; }
-{TYPE}            { return TYPE; }
-{INT}             { return INT; }
-{HEX}             { return INT; } // HEX和OCT被视为INT类型
-{OCT}             { return INT; }
-{RELOP}           { return RELOP; }
-{FLOAT}           { return FLOAT; }
-{ID}              { return ID; }
+{STRUCT}          { yylval = createNode(yylineno, T_OTHER, "STRUCT", 0); return STRUCT; }
+{RETURN}          { yylval = createNode(yylineno, T_OTHER, "RETURN", 0); return RETURN; }
+{IF}              { yylval = createNode(yylineno, T_OTHER, "IF", 0); return IF; }
+{ELSE}            { yylval = createNode(yylineno, T_OTHER, "ELSE", 0); return ELSE; }
+{WHILE}           { yylval = createNode(yylineno, T_OTHER, "WHILE", 0); return WHILE; }
+{TYPE}            { yylval = createNode(yylineno, T_TYPE, yytext, 0); return TYPE; }
+{INT}             { yylval = createNode(yylineno, T_INT, yytext, 0); return INT; }
+{HEX}             { yylval = createNode(yylineno, T_HEX, yytext, 0); return INT; } // HEX和OCT被视为INT类型
+{OCT}             { yylval = createNode(yylineno, T_OCT, yytext, 0); return INT; }
+{RELOP}           { yylval = createNode(yylineno, T_OTHER, "RELOP", 0); return RELOP; }
+{FLOAT}           { yylval = createNode(yylineno, T_FLOAT, yytext, 0); return FLOAT; }
+{ID}              { yylval = createNode(yylineno, T_ID, yytext, 0); return ID; }
 
-";"               { return SEMI; } 
-","               { return COMMA; }
-"="               { return ASSIGNOP; }
-"+"               { return PLUS; }
-"-"               { return MINUS; }     
-"*"               { return STAR; }
-"/"               { return DIV; }
-"&&"              { return AND; }
-"||"              { return OR; }
-"."               { return DOT; }
-"!"               { return NOT; }
-"("               { return LP; }
-")"               { return RP; }
-"["               { return LB; }
-"]"               { return RB; }
-"{"               { return LC; }
-"}"               { return RC; }
+";"               { yylval = createNode(yylineno, T_OTHER, "SEMI", 0); return SEMI; } 
+","               { yylval = createNode(yylineno, T_OTHER, "COMMA", 0); return COMMA; }
+"="               { yylval = createNode(yylineno, T_OTHER, "ASSIGNOP", 0); return ASSIGNOP; }
+"+"               { yylval = createNode(yylineno, T_OTHER, "PLUS", 0); return PLUS; }
+"-"               { yylval = createNode(yylineno, T_OTHER, "MINUS", 0); return MINUS; }     
+"*"               { yylval = createNode(yylineno, T_OTHER, "STAR", 0); return STAR; }
+"/"               { yylval = createNode(yylineno, T_OTHER, "DIV", 0); return DIV; }
+"&&"              { yylval = createNode(yylineno, T_OTHER, "AND", 0); return AND; }
+"||"              { yylval = createNode(yylineno, T_OTHER, "OR", 0); return OR; }
+"."               { yylval = createNode(yylineno, T_OTHER, "DOT", 0); return DOT; }
+"!"               { yylval = createNode(yylineno, T_OTHER, "NOT", 0); return NOT; }
+"("               { yylval = createNode(yylineno, T_OTHER, "LP", 0); return LP; }
+")"               { yylval = createNode(yylineno, T_OTHER, "RP", 0); return RP; }
+"["               { yylval = createNode(yylineno, T_OTHER, "LB", 0); return LB; }
+"]"               { yylval = createNode(yylineno, T_OTHER, "RB", 0); return RB; }
+"{"               { yylval = createNode(yylineno, T_OTHER, "LC", 0); return LC; }
+"}"               { yylval = createNode(yylineno, T_OTHER, "RC", 0); return RC; }
 
 
 "//"                    {
@@ -101,28 +103,20 @@ TAB [\t]
     }
 }
 {BLANK} {}
+{TAB}   { yycolumn += 3; }
 
+\n|\r  { yycolumn = 1; }
 
-\n  { yycolumn = 1; }
-
-{OCTERROR}  {printf("Error type A at Line %d: Illegal octal number \'%s\'\n", yylineno, yytext); }
-{HEXERROR} {printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'\n", yylineno, yytext); }
-{DECERROR} {printf("Error type A at Line %d: Illegal decimal number \'%s\'\n", yylineno, yytext); }
-{FLOATERROR} {printf("Error type A at Line %d: Illegal floating number \'%s\'\n", yylineno, yytext);  }
-.   {printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext); }
+{OCTERROR}  {printf("Error type A at Line %d: Illegal octal number \'%s\'\n", yylineno, yytext); yylval = NULL; lexical_error = 1; return ERRORNUM;}
+{HEXERROR} {printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'\n", yylineno, yytext); yylval = NULL; lexical_error = 1; return ERRORNUM;}
+{DECERROR} {printf("Error type A at Line %d: Illegal decimal number \'%s\'\n", yylineno, yytext); yylval = NULL; lexical_error = 1; return ERRORNUM;}
+{FLOATERROR} {printf("Error type A at Line %d: Illegal floating number \'%s\'\n", yylineno, yytext); yylval = NULL; lexical_error = 1; return ERRORNUM;}
+.   {printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext); lexical_error = 1;}
 
 %%
 
-
-/* Handle with error type A*/
-void unrecognized_char(char c)
-{
-    char buf[32] = "Unrecognized character: ?";
-    buf[24] = c;
-    yyerror(buf);
-}
-
-void yyerror(const char* msg)
-{
-    printf("Error type A at Line %d: %s.\n", yylineno, msg);
+// the yyerror function is mainly for the syntax error (type B)
+void yyerror(const char* msg){
+    fprintf(stderr, "Error type B at line %d: %s.\n", yylineno, msg);
+    return;
 }
