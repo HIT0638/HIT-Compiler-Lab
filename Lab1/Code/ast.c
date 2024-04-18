@@ -43,7 +43,7 @@ pNode createNode(int _lineno, Type _type, char *_value, int args, ...)
             tempNode->nextSibling = va_arg(ap, pNode);
             if (tempNode->nextSibling == NULL)
             {
-                break;
+                continue;
             }
             tempNode = tempNode->nextSibling;
         }

@@ -120,8 +120,3 @@ TAB [\t]
 
 %%
 
-// the yyerror function is mainly for the syntax error (type B)
-void yyerror(const char* msg){
-    fprintf(stderr, "Error type B at line %d: %s.\n", yylineno, msg);
-    return;
-}

@@ -1,7 +1,6 @@
 #include "ast.h"
 #include "syntax.tab.h"
 
-extern FILE *yyin;
 extern int yylineno;
 extern int yyparse();
 extern void yyrestart(FILE *f);
@@ -32,3 +31,4 @@ int main(int argc, char **argv)
   delTree(root);
   return 0;
 }
+

@@ -3,13 +3,16 @@
 #define YYSTYPE TreeNode* 
 #include "ast.h"
 #include "lex.yy.c"
-
+#define YYERROR_VERBOSE 1
 extern int syntax_error;
+void yyerror(const char* msg);
 
 pNode root;
 
-
+static int error_reported = 0;
 %}
+
+%error-verbose
 
 // terminal tokens
 %token INT
@@ -119,6 +122,10 @@ StmtList : Stmt StmtList { $$ = createNode(@$.first_line, NON_T, "StmtList", 2, 
 Stmt : Exp SEMI {$$ = createNode(@$.first_line, NON_T, "Stmt", 2, $1, $2);}
 | CompSt    { $$ = createNode(@$.first_line, NON_T, "Stmt", 1, $1);}
 | RETURN Exp SEMI   { $$ = createNode(@$.first_line, NON_T, "Stmt", 3, $1, $2, $3);}
+| IF LP Exp RP Stmt error {
+    printf("Error at line %d: missing ';'\n", @5.last_line);
+    syntax_error = 1;
+}
 | IF LP Exp RP Stmt %prec LOWER_THAN_ELSE   {$$ = createNode(@$.first_line, NON_T, "Stmt", 5, $1, $2, $3, $4, $5);}
 | IF LP Exp RP Stmt ELSE Stmt   {$$ = createNode(@$.first_line, NON_T, "Stmt", 7, $1, $2, $3, $4, $5, $6, $7);}
 | WHILE LP Exp RP Stmt  { $$ = createNode(@$.first_line, NON_T, "Stmt", 5, $1, $2, $3, $4, $5);}
@@ -157,15 +164,21 @@ Exp : Exp ASSIGNOP Exp  {$$ = createNode(@$.first_line, NON_T, "Exp", 3, $1, $2,
 | LP Exp RP {$$ = createNode(@$.first_line, NON_T, "Exp", 3, $1, $2, $3);}
 | MINUS Exp { $$ = createNode(@$.first_line, NON_T, "Exp", 2, $1, $2);}
 | NOT Exp   {$$ = createNode(@$.first_line, NON_T, "Exp", 2, $1, $2);}
-| ID LP Args RP { $$ = createNode(@$.first_line, NON_T, "Exp", 4, $1, $2, $3, $4);}
+| ID LP Args RP { // 函数调用
+    $$ = createNode(@$.first_line, NON_T, "Exp", 4, $1, $2, $3, $4);}
 | ID LP RP  {$$ = createNode(@$.first_line, NON_T, "Exp", 3, $1, $2, $3);}
-| Exp LB Exp RB { $$ = createNode(@$.first_line, NON_T, "Exp", 4, $1, $2, $3, $4);}
+| Exp LB Exp RB { // 数组
+    $$ = createNode(@$.first_line, NON_T, "Exp", 4, $1, $2, $3, $4);}
 | Exp DOT ID    { $$ = createNode(@$.first_line, NON_T, "Exp", 3, $1, $2, $3);}
 | ID    {$$ = createNode(@$.first_line, NON_T, "Exp", 1, $1);}
 | INT   {$$ = createNode(@$.first_line, NON_T, "Exp", 1, $1);}
 | FLOAT { $$ = createNode(@$.first_line, NON_T, "Exp", 1, $1);}
 // error handling
 | ERRORNUM {$$ = createNode(@$.first_line, NON_T, "Exp", 1, $1);syntax_error = 1;}
+| Exp LB Exp error RB { // 处理数组[...]中的错误
+    syntax_error = 1;
+    // yyerror("Missing \"]\"");
+}
 ;
 
 Args : Exp COMMA Args   {$$ = createNode(@$.first_line, NON_T, "Args", 3, $1, $2, $3);}
@@ -173,4 +186,9 @@ Args : Exp COMMA Args   {$$ = createNode(@$.first_line, NON_T, "Args", 3, $1, $2
 ;
 
 %%
+
+// the yyerror function is mainly for the syntax error (type B)
+void yyerror(const char* msg){
+    fprintf(stderr, "Error type B at line %d: %s.\n", yylineno, msg);
+}
 
