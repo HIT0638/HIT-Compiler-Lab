@@ -31,7 +31,7 @@ typedef struct Type_ {
 // 同时作链表设计的符号表数据结构
 typedef struct FieldList_ {
     char* name;
-    Type type;
+    Type* type;
     FieldList tail;
 } FieldList_ ;
 

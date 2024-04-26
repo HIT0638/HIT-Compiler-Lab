@@ -73,6 +73,10 @@ Type createType(Kind kind, int num, ...){
             t->u.array.elem = va_arg(tlist, Type);
             // printf("创建数组类型\n");
             break;
+        case STRUCTURE:
+            t->u.structure->name = va_arg(tlist, char*);
+            t->u.structure->type = va_arg(tlist, FieldList);
+            break;
     }
     va_end(tlist);
     return t;
@@ -290,7 +294,7 @@ void Dec(pNode root, Type type){
         VarDec(root->firstChild, type);
     
     if(root->firstChild->nextSibling){
-        // Type exp_type = Exp(root->firstChild->nextSibling->nextSibling);
+        Type exp_type = Exp(root->firstChild->nextSibling->nextSibling);
 
         /**
          * 赋值号两边类型应该匹配。
@@ -298,6 +302,10 @@ void Dec(pNode root, Type type){
          * 数组：
         */
 
+       if(type->u.basic != exp_type->u.basic){
+            printf("Error at Line %d: Type mismatched for assignment.\n",
+                    root->firstChild->lineno);
+       }
     }
 }
 
@@ -411,6 +419,7 @@ Type Exp(pNode root){
         if (!idsym) {
             printf("Error type 1 at Line %d: Undefined variable \"%s\".\n",
                 root->firstChild->lineno, root->firstChild->value);
+            exit(0);
             return NULL;
         } else {
             return idsym->type;
@@ -437,6 +446,7 @@ Type Exp(pNode root){
             printf("Error type 12 at Line %d: Index \"%s\" is not an integer.\n",
                 root->lineno, expRight->firstChild->value);
         }
+        exit(0);
         return (t1->kind == ARRAY) ? t1->u.array.elem : NULL; // 返回数组元素类型
     }
 

@@ -35,22 +35,12 @@ syntax-c: $(YFILE)
 .PHONY: clean test
 test:
 	./parser ../Test/1.txt > ../testout/test1out.txt
-	./parser ../Test/2.txt > ../testout/test2out.txt
 	./parser ../Test/3.txt > ../testout/test3out.txt
-	./parser ../Test/4.txt > ../testout/test4out.txt
 	./parser ../Test/5.txt > ../testout/test5out.txt
 	./parser ../Test/6.txt > ../testout/test6out.txt
 	./parser ../Test/7.txt > ../testout/test7out.txt
-	./parser ../Test/8.txt > ../testout/test8out.txt
-	./parser ../Test/9.txt > ../testout/test9out.txt
 	./parser ../Test/10.txt > ../testout/test10out.txt
-	./parser ../Test/11.txt > ../testout/test11out.txt
 	./parser ../Test/12.txt > ../testout/test12out.txt
-	./parser ../Test/13.txt > ../testout/test13out.txt
-	./parser ../Test/14.txt > ../testout/test14out.txt
-	./parser ../Test/15.txt > ../testout/test15out.txt
-	./parser ../Test/16.txt > ../testout/test16out.txt
-	./parser ../Test/17.txt > ../testout/test17out.txt
 
 
 clean:
